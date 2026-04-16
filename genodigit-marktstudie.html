@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marktstudie — Wohnbaugenossenschaften Kanton Zürich</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f4f2;
+      color: #222;
+      padding: 40px 24px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    h1 { font-size: 1.6rem; margin-bottom: 4px; }
+    .meta { color: #777; font-size: 0.83rem; margin-bottom: 8px; }
+    .tag { display: inline-block; background: #2c3e50; color: white; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; margin-right: 4px; }
+
+    /* KPI Row */
+    .kpis { display: flex; gap: 16px; margin: 28px 0; flex-wrap: wrap; }
+    .kpi { background: white; border-radius: 8px; padding: 18px 24px; flex: 1; min-width: 160px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .kpi .val { font-size: 2rem; font-weight: 700; color: #2c3e50; }
+    .kpi .lbl { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+    h2 { font-size: 1.05rem; color: #444; margin: 32px 0 12px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px; }
+
+    /* Filter bar */
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+    .filters label { font-size: 0.8rem; color: #666; }
+    .filters input, .filters select {
+      border: 1px solid #ddd; border-radius: 6px; padding: 5px 10px; font-size: 0.82rem; background: white;
+    }
+    .filters input { width: 240px; }
+
+    /* Table */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-size: 0.84rem; }
+    th { background: #2c3e50; color: white; text-align: left; padding: 10px 12px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+    td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafaf8; }
+    tr.hidden { display: none; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 0.73rem; font-weight: 600; white-space: nowrap; }
+    .sz-xl  { background: #c8e6c9; color: #1b5e20; }
+    .sz-lg  { background: #dcedc8; color: #33691e; }
+    .sz-md  { background: #fff9c4; color: #f57f17; }
+    .sz-sm  { background: #ffe0b2; color: #e65100; }
+    .sz-xs  { background: #fce4ec; color: #880e4f; }
+    .sz-na  { background: #f5f5f5; color: #9e9e9e; }
+
+    /* Stars */
+    .stars { color: #f5a623; letter-spacing: -1px; font-size: 0.95rem; }
+    .stars .empty { color: #ddd; }
+
+    .na { color: #bbb; font-style: italic; font-size: 0.8rem; }
+    .name-cell { font-weight: 600; }
+    .sub { font-size: 0.75rem; color: #888; display: block; }
+
+    /* Legend */
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.78rem; color: #666; margin-bottom: 24px; }
+    .legend span { display: flex; align-items: center; gap: 5px; }
+
+    /* Digital detail table */
+    .detail-note { font-size: 0.78rem; color: #666; margin-top: 8px; }
+
+    /* Section: full list */
+    .full-list-note { font-size: 0.8rem; color: #888; margin-bottom: 10px; }
+
+    @media (max-width: 700px) {
+      .kpi { min-width: 130px; }
+      .filters input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Marktstudie — Wohnbaugenossenschaften Kanton Zürich</h1>
+  <div class="meta">
+    Projekt: GenoDigit &nbsp;·&nbsp; Erarbeitet: AC &nbsp;·&nbsp; Stand: April 2026 &nbsp;·&nbsp; Version 1
+    <br><span class="tag">intern</span><span class="tag">GenoDigit</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi"><div class="val">142</div><div class="lbl">Genossenschaften erfasst</div></div>
+    <div class="kpi"><div class="val">~20'000+</div><div class="lbl">Wohneinheiten (bekannt, top 10)</div></div>
+    <div class="kpi"><div class="val">9</div><div class="lbl">Vollständig analysiert</div></div>
+    <div class="kpi"><div class="val">3 / 5</div><div class="lbl">Ø Digitalisierungsgrad (analysierte)</div></div>
+  </div>
+
+  <!-- ════════════════════════════════ -->
+  <!-- SEKTION 1: DETAILANALYSE -->
+  <!-- ════════════════════════════════ -->
+  <h2>Detailanalyse — Grösste und digitalste Genossenschaften</h2>
+  <p class="detail-note" style="margin-bottom:14px;">
+    Bewertet nach Grösse (Wohnungen), Geschäftsführung und Online-Digitalisierungsgrad (Website, Mieterportal, App, Social Media, digitale Kommunikation).
+  </p>
+
+  <div class="legend">
+    <span><span class="badge sz-xl">XL</span> 2000+ Wohnungen</span>
+    <span><span class="badge sz-lg">L</span> 500–1999</span>
+    <span><span class="badge sz-md">M</span> 200–499</span>
+    <span><span class="badge sz-sm">S</span> 100–199</span>
+    <span><span class="badge sz-xs">XS</span> &lt;100</span>
+    <span><span class="stars">★★★★★</span> = sehr hoch &nbsp;|&nbsp; <span class="stars"><span class="empty">★★★★★</span></span> = kaum online</span>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>PLZ / Ort</th>
+        <th>Wohnungen</th>
+        <th>Geschäftsführung</th>
+        <th>Digitalisierung</th>
+        <th>Begründung</th>
+        <th>Website</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td class="name-cell">ABZ — Allgemeine Baugenossenschaft Zürich</td>
+        <td>8003 Zürich</td>
+        <td><span class="badge sz-xl">XL</span><br><span class="sub">5'097 (59 Siedlungen)</span></td>
+        <td>Tessa Müller<span class="sub">Geschäftsführerin</span></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td>Professionelle Website, Karriereportal, Newsletter, Social Media aktiv, Online-Wohnungsbewerbung</td>
+        <td><a href="https://www.abz.ch" target="_blank">abz.ch</a></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td class="name-cell">FGZ — Familienheim-Genossenschaft Zürich</td>
+        <td>8045 Zürich</td>
+        <td><span class="badge sz-xl">XL</span><br><span class="sub">~2'300 (25 Siedlungen)</span></td>
+        <td>Daniela Ziswiler<span class="sub">Stv. Geschäftsführerin / Leiterin Bauten</span></td>
+        <td><span class="stars">★★★☆☆</span></td>
+        <td>Funktionale Website, Online-Objekte, kein Mieterportal sichtbar, kein App-Angebot</td>
+        <td><a href="https://fgzzh.ch" target="_blank">fgzzh.ch</a></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td class="name-cell">GBMZ — Gemeinnützige Bau- und Mietergenossenschaft Zürich</td>
+        <td>8004 Zürich</td>
+        <td><span class="badge sz-lg">L</span><br><span class="sub">~1'000 (11 Siedlungen)</span></td>
+        <td>Matthias Lüthi<span class="sub">Geschäftsführer (ab Juni 2026: Caroline Morel)</span></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td>Web-App mit 15 Services (Reparaturanfragen, Schlüsselbestellung, Dokumente, mehrsprachig, 24/7). Höchster Digitalisierungsgrad aller analysierten Genossenschaften.</td>
+        <td><a href="https://gbmz.ch" target="_blank">gbmz.ch</a></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td class="name-cell">WOGENO — Genossenschaft WOGENO Zürich</td>
+        <td>8005 Zürich</td>
+        <td><span class="badge sz-lg">L</span><br><span class="sub">565 (78 Liegenschaften)</span></td>
+        <td>Anita Schlegel / Vedrana Žalac<span class="sub">Co-Geschäftsleitung (seit 2025)</span></td>
+        <td><span class="stars">★★★☆☆</span></td>
+        <td>Gepflegte Website, Online-Mitgliedschaft, Wohnungsangebot online, kein digitales Mieterportal</td>
+        <td><a href="https://www.wogeno-zuerich.ch" target="_blank">wogeno-zuerich.ch</a></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td class="name-cell">Baugenossenschaft mehr als wohnen</td>
+        <td>8050 Zürich</td>
+        <td><span class="badge sz-md">M</span><br><span class="sub">~370 (Hunziker Areal)</span></td>
+        <td>Team-Geschäftsleitung<span class="sub">(8 Personen, kollektiv)</span></td>
+        <td><span class="stars">★★★★☆</span></td>
+        <td>Moderner Webauftritt, digitaler Jahresbericht, aktive Kommunikation, Innovationsanspruch. Kein Mieterportal öffentlich sichtbar.</td>
+        <td><a href="https://www.mehralswohnen.ch" target="_blank">mehralswohnen.ch</a></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td class="name-cell">Bau- und Wohngenossenschaft Kraftwerk1</td>
+        <td>8005 Zürich</td>
+        <td><span class="badge sz-md">M</span><br><span class="sub">~200 (Hardturm + Heizkraftwerk)</span></td>
+        <td>Andreas Engweiler / Stefanie Pfändler<span class="sub">Co-Management (soziokratisch)</span></td>
+        <td><span class="stars">★★★★☆</span></td>
+        <td>Moderne, inhaltlich reichhaltige Website, soziokratische Org. gut kommuniziert, aktive Aussenkommunikation, kein sichtbares Mieterportal</td>
+        <td><a href="https://kraftwerk1.ch" target="_blank">kraftwerk1.ch</a></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td class="name-cell">Genossenschaft Kalkbreite</td>
+        <td>8003 Zürich</td>
+        <td><span class="badge sz-sm">S</span><br><span class="sub">~170 (Kalkbreite + Zwicky Süd)</span></td>
+        <td>Kollektiv-Management<span class="sub">(seit Mai 2024, keine Einzelperson; Regula Willi: Mitglieder & Personal)</span></td>
+        <td><span class="stars">★★★★☆</span></td>
+        <td>Zweisprachige Website (DE/EN), modern gestaltet, transparente Kommunikation, aktiver Blog, kein digitales Mieterportal sichtbar</td>
+        <td><a href="https://www.kalkbreite.net" target="_blank">kalkbreite.net</a></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td class="name-cell">MBGZ — Mieter-Baugenossenschaft Zürich</td>
+        <td>8002 Zürich</td>
+        <td><span class="badge sz-na">n.a.</span></td>
+        <td>Claudia Bürgler<span class="sub">Geschäftsführerin</span></td>
+        <td><span class="stars">★★★☆☆</span></td>
+        <td>Funktionale Website, Online-Vermietung, Standard-Präsenz, kein sichtbares Mieterportal</td>
+        <td><a href="https://www.mbgz.ch" target="_blank">mbgz.ch</a></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td class="name-cell">ZBWG — Zürcher Bau- und Wohngenossenschaft</td>
+        <td>8006 Zürich</td>
+        <td><span class="badge sz-sm">S</span><br><span class="sub">124 (17 Liegenschaften)</span></td>
+        <td>Bettina Burkhardt<span class="sub">Geschäftsführerin (bis Sept. 2025)</span></td>
+        <td><span class="stars">★★☆☆☆</span></td>
+        <td>Einfache, informative Website ohne Interaktivität, Administration an PIAG ausgelagert, kein Online-Mieterservice sichtbar</td>
+        <td><a href="https://www.zbwg.ch" target="_blank">zbwg.ch</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ════════════════════════════════ -->
+  <!-- SEKTION 2: VOLLSTÄNDIGE LISTE -->
+  <!-- ════════════════════════════════ -->
+  <h2>Vollständige Mitgliederliste — Kanton Zürich (wbg-schweiz.ch)</h2>
+  <p class="full-list-note">
+    Quelle: Wohnbaugenossenschaften Schweiz, April 2026. 142 Einträge. Details (Wohnungen, Geschäftsführung) für nicht analysierte Genossenschaften: direkte Kontaktaufnahme erforderlich.
+  </p>
+
+  <div class="filters">
+    <label>Suche:</label>
+    <input type="text" id="searchInput" placeholder="Name oder PLZ..." oninput="filterTable()">
+    <label>PLZ:</label>
+    <select id="plzFilter" onchange="filterTable()">
+      <option value="">Alle</option>
+      <option value="8001">8001</option>
+      <option value="8002">8002</option>
+      <option value="8003">8003</option>
+      <option value="8004">8004</option>
+      <option value="8005">8005</option>
+      <option value="8006">8006</option>
+      <option value="8008">8008</option>
+      <option value="8024">8024</option>
+      <option value="8032">8032</option>
+      <option value="8036">8036</option>
+      <option value="8037">8037</option>
+      <option value="8038">8038</option>
+      <option value="8041">8041</option>
+      <option value="8045">8045</option>
+      <option value="8046">8046</option>
+      <option value="8047">8047</option>
+      <option value="8048">8048</option>
+      <option value="8049">8049</option>
+      <option value="8050">8050</option>
+      <option value="8051">8051</option>
+      <option value="8052">8052</option>
+      <option value="8053">8053</option>
+      <option value="8055">8055</option>
+      <option value="8057">8057</option>
+      <option value="8064">8064</option>
+      <option value="8700">8700 Küsnacht</option>
+      <option value="8302">8302 Kloten</option>
+      <option value="8280">8280 Kreuzlingen</option>
+    </select>
+  </div>
+
+  <div class="tbl-wrap">
+  <table id="fullTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>PLZ / Ort</th>
+        <th>Analysiert</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>AHAGE Genossenschaft</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>2</td><td>Allgemeine Baugenossenschaft Zürich ABZ</td><td>8003 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>3</td><td>ASIG Wohngenossenschaft</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>4</td><td>BAHOGE Wohnbaugenossenschaft</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>5</td><td>Bau- &amp; Wohngenossenschaft NeNa1</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>6</td><td>Bau- und Siedlungsgenossenschaft Höngg</td><td>8049 Zürich</td><td class="na">—</td></tr>
+      <tr><td>7</td><td>Bau- und Wohngenossenschaft Hohlraum</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>8</td><td>Bau- und Wohngenossenschaft Kraftwerk1</td><td>8005 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>9</td><td>Baugenossenschaft Alpenblick</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>10</td><td>Baugenossenschaft berufstätiger Frauen</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>11</td><td>Baugenossenschaft Brunnenhof Zürich (BBZ)</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>12</td><td>Baugenossenschaft Brunnenrain</td><td>8045 Zürich</td><td class="na">—</td></tr>
+      <tr><td>13</td><td>Baugenossenschaft Denzlerstrasse</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>14</td><td>Baugenossenschaft der Strassenbahner</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>15</td><td>Baugenossenschaft des Kaufm. Verbandes ZH</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>16</td><td>Baugenossenschaft Eidgen. Beamter, Zürich-Flugplatz</td><td>8302 Kloten</td><td class="na">—</td></tr>
+      <tr><td>17</td><td>Baugenossenschaft Entlisberg</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>18</td><td>Baugenossenschaft Freiblick</td><td>8041 Zürich</td><td class="na">—</td></tr>
+      <tr><td>19</td><td>Baugenossenschaft Frohes Wohnen Zürich BFWZ</td><td>8064 Zürich</td><td class="na">—</td></tr>
+      <tr><td>20</td><td>Baugenossenschaft Frohheim Zürich (BGF)</td><td>8001 Zürich</td><td class="na">—</td></tr>
+      <tr><td>21</td><td>Baugenossenschaft für neuzeitliches Wohnen</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>22</td><td>Baugenossenschaft GISA</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>23</td><td>Baugenossenschaft Glattal Zürich</td><td>8052 Zürich</td><td class="na">—</td></tr>
+      <tr><td>24</td><td>Baugenossenschaft Graphika Zürich</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>25</td><td>Baugenossenschaft Hagenbrünneli</td><td>8046 Zürich</td><td class="na">—</td></tr>
+      <tr><td>26</td><td>Baugenossenschaft Halde Zürich</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>27</td><td>Baugenossenschaft Heimet</td><td>8046 Zürich</td><td class="na">—</td></tr>
+      <tr><td>28</td><td>Baugenossenschaft Hochwacht Zürich</td><td>8280 Kreuzlingen</td><td class="na">—</td></tr>
+      <tr><td>29</td><td>Baugenossenschaft Im Gut</td><td>8055 Zürich</td><td class="na">—</td></tr>
+      <tr><td>30</td><td>Baugenossenschaft Kleeweid</td><td>8041 Zürich</td><td class="na">—</td></tr>
+      <tr><td>31</td><td>Baugenossenschaft Kyburg</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>32</td><td>Baugenossenschaft Letten BGL</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>33</td><td>Baugenossenschaft Linth-Escher</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>34</td><td>Baugenossenschaft Luegisland</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>35</td><td>Baugenossenschaft Maler und Bildhauer Zürich</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>36</td><td>Baugenossenschaft mehr als wohnen</td><td>8050 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>37</td><td>Baugenossenschaft Oberstrass</td><td>8006 Zürich</td><td class="na">—</td></tr>
+      <tr><td>38</td><td>Baugenossenschaft Ponsyrus</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>39</td><td>Baugenossenschaft Rotach Zürich</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>40</td><td>Baugenossenschaft Schönau</td><td>8052 Zürich</td><td class="na">—</td></tr>
+      <tr><td>41</td><td>Baugenossenschaft Schönheim</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>42</td><td>Baugenossenschaft Sonnengarten</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>43</td><td>Baugenossenschaft St. Jakob, Zürich</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>44</td><td>Baugenossenschaft Stadt und Land</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>45</td><td>Baugenossenschaft SUWITA</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>46</td><td>Baugenossenschaft Süd-Ost</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>47</td><td>Baugenossenschaft Vrenelisgärtli</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>48</td><td>Baugenossenschaft Waidberg</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>49</td><td>Baugenossenschaft Waidmatt</td><td>8046 Zürich</td><td class="na">—</td></tr>
+      <tr><td>50</td><td>Baugenossenschaft Werdmühle BGW</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>51</td><td>Baugenossenschaft Wiedikon</td><td>8055 Zürich</td><td class="na">—</td></tr>
+      <tr><td>52</td><td>Baugenossenschaft Wiese</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>53</td><td>Baugenossenschaft Zentralstrasse</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>54</td><td>Baugenossenschaft Zurlinden</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>55</td><td>Baugenossenschaft Zürich 2</td><td>8002 Zürich</td><td class="na">—</td></tr>
+      <tr><td>56</td><td>Baugenossenschaft Zürichsee</td><td>8700 Küsnacht</td><td class="na">—</td></tr>
+      <tr><td>57</td><td>BEP Baugenossenschaft des eidg. Personals</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>58</td><td>bonlieu Genossenschaft für Wohnen und Kultur</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>59</td><td>Eisenbahner Baugenossenschaft Dreispitz Zürich</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>60</td><td>Eisenbahner Baugenossenschaft Zürich-Altstetten</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>61</td><td>Evangelischer Frauenbund Zürich efz</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>62</td><td>Familienheim-Genossenschaft Zürich (FGZ)</td><td>8045 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>63</td><td>Gemeinnützige Bau- und Mietergenossenschaft Zürich (GBMZ)</td><td>8004 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>64</td><td>Gemeinnützige Baugenossenschaft Burgmatte</td><td>8008 Zürich</td><td class="na">—</td></tr>
+      <tr><td>65</td><td>Gemeinnützige Baugenossenschaft Heimelig</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>66</td><td>Gemeinnützige Baugenossenschaft Hirslanden</td><td>8032 Zürich</td><td class="na">—</td></tr>
+      <tr><td>67</td><td>Gemeinnützige Baugenossenschaft InVia</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>68</td><td>Gemeinnützige Baugenossenschaft Jungholz</td><td>8046 Zürich</td><td class="na">—</td></tr>
+      <tr><td>69</td><td>Gemeinnützige Baugenossenschaft Limmattal (GBL)</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>70</td><td>Gemeinnützige Baugenossenschaft Riesbach</td><td>8008 Zürich</td><td class="na">—</td></tr>
+      <tr><td>71</td><td>Gemeinnützige Baugenossenschaft Röntgenhof Zürich (GBRZ)</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>72</td><td>Gemeinnützige Baugenossenschaft Selbsthilfe Zürich</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>73</td><td>Gemeinnützige Baugenossenschaft Zürich 2</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>74</td><td>Gemeinnützige Baugenossenschaft Zürich 7</td><td>8053 Zürich</td><td class="na">—</td></tr>
+      <tr><td>75</td><td>Genossenschaft 31. März</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>76</td><td>Genossenschaft BEZET</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>77</td><td>Genossenschaft BROWO</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>78</td><td>Genossenschaft der Baufreunde</td><td>8046 Zürich</td><td class="na">—</td></tr>
+      <tr><td>79</td><td>Genossenschaft Dorfkern</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>80</td><td>Genossenschaft Dreieck</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>81</td><td>Genossenschaft DURCHBRUCH</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>82</td><td>Genossenschaft für Alterswohnungen Zürich-Schwamendingen</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>83</td><td>Genossenschaft für fortschrittlichen Wohnungsbau (GFW)</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>84</td><td>Genossenschaft Herzetappe 10</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>85</td><td>Genossenschaft Hofgarten</td><td>8041 Zürich</td><td class="na">—</td></tr>
+      <tr><td>86</td><td>Genossenschaft Iglu</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>87</td><td>Genossenschaft Kalkbreite</td><td>8003 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>88</td><td>Genossenschaft Karthago</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>89</td><td>Genossenschaft Leben im Fluss</td><td>8008 Zürich</td><td class="na">—</td></tr>
+      <tr><td>90</td><td>Genossenschaft Neubühl</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>91</td><td>Genossenschaft Platten 64</td><td>8032 Zürich</td><td class="na">—</td></tr>
+      <tr><td>92</td><td>Genossenschaft Roter Tisch</td><td>8006 Zürich</td><td class="na">—</td></tr>
+      <tr><td>93</td><td>Genossenschaft SEWOP</td><td>8052 Zürich</td><td class="na">—</td></tr>
+      <tr><td>94</td><td>Genossenschaft Studentenhaus ALV</td><td>8057 Zürich</td><td class="na">—</td></tr>
+      <tr><td>95</td><td>Genossenschaft WOGENO Zürich</td><td>8005 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>96</td><td>Genossenschaft zum Korn</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>97</td><td>Gewerkschaftliche Wohn- und Baugenossenschaft GEWOBAG</td><td>8047 Zürich</td><td class="na">—</td></tr>
+      <tr><td>98</td><td>HABITAT 8000 AG</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>99</td><td>Hauseigentümerverband Zürich</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>100</td><td>Heimgenossenschaft Schweighof Zürich</td><td>8045 Zürich</td><td class="na">—</td></tr>
+      <tr><td>101</td><td>homelab Baugenossenschaft</td><td>8024 Zürich</td><td class="na">—</td></tr>
+      <tr><td>102</td><td>Liberale Baugenossenschaft Höngg</td><td>8049 Zürich</td><td class="na">—</td></tr>
+      <tr><td>103</td><td>Logis Suisse AG</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>104</td><td>Mieter Baugenossenschaft Zürich</td><td>8002 Zürich</td><td class="na">—</td></tr>
+      <tr><td>105</td><td>MBGZ — Mieter-Baugenossenschaft Zürich</td><td>8002 Zürich</td><td>✓ siehe oben</td></tr>
+      <tr><td>106</td><td>Rohn-Salvisberg-Stiftung</td><td>8053 Zürich</td><td class="na">—</td></tr>
+      <tr><td>107</td><td>SFW-Stiftung Familienwohnungen</td><td>8008 Zürich</td><td class="na">—</td></tr>
+      <tr><td>108</td><td>Siedlungsgenossenschaft Eigengrund</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>109</td><td>Siedlungsgenossenschaft Sunnige Hof</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>110</td><td>Stiftung Alterssiedlung Hadlaub</td><td>8006 Zürich</td><td class="na">—</td></tr>
+      <tr><td>111</td><td>Stiftung Alterssiedlung Witikon</td><td>8053 Zürich</td><td class="na">—</td></tr>
+      <tr><td>112</td><td>Stiftung Alterswohnungen der Stadt Zürich SAW</td><td>8036 Zürich</td><td class="na">—</td></tr>
+      <tr><td>113</td><td>Stiftung Alterswohnungen Probstei Zürich-Schwamendingen</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>114</td><td>Stiftung Bauen und Wohnen SBW</td><td>8032 Zürich</td><td class="na">—</td></tr>
+      <tr><td>115</td><td>Stiftung Einfach Wohnen (SEW)</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>116</td><td>Stiftung für Studentisches Wohnen</td><td>8006 Zürich</td><td class="na">—</td></tr>
+      <tr><td>117</td><td>Stiftung Jugendwohnnetz JUWO</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>118</td><td>Stiftung PONTE Projektfonds</td><td>8003 Zürich</td><td class="na">—</td></tr>
+      <tr><td>119</td><td>Stiftung PWG</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>120</td><td>Stiftung Renggergut</td><td>8038 Zürich</td><td class="na">—</td></tr>
+      <tr><td>121</td><td>Team 92, Bau- und Verwaltungsgenossenschaft</td><td>8049 Zürich</td><td class="na">—</td></tr>
+      <tr><td>122</td><td>trift Bewirtschaftung von Grundstücken AG</td><td>8002 Zürich</td><td class="na">—</td></tr>
+      <tr><td>123</td><td>Verein Arche Zürich</td><td>8048 Zürich</td><td class="na">—</td></tr>
+      <tr><td>124</td><td>Verein BuntGemischt</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>125</td><td>VITASANA Baugenossenschaft</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>126</td><td>Wohn- und Siedlungsgenossenschaft Zürich wsgz</td><td>8050 Zürich</td><td class="na">—</td></tr>
+      <tr><td>127</td><td>Wohnbaugenossenschaft AltersKollektiv</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>128</td><td>Wohnbaugenossenschaft AMJ</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>129</td><td>Wohnbaugenossenschaft Gamper</td><td>8004 Zürich</td><td class="na">—</td></tr>
+      <tr><td>130</td><td>Wohnbaugenossenschaft Gesundes Wohnen MCS</td><td>8041 Zürich</td><td class="na">—</td></tr>
+      <tr><td>131</td><td>Wohnbaugenossenschaft Grubenacker</td><td>8052 Zürich</td><td class="na">—</td></tr>
+      <tr><td>132</td><td>Wohnbaugenossenschaft Josephine</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>133</td><td>Wohnbaugenossenschaft Neuland</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>134</td><td>Wohnbaugenossenschaft Rüegg</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>135</td><td>Wohnbaugenossenschaften Schweiz (Verband)</td><td>8032 Zürich</td><td class="na">—</td></tr>
+      <tr><td>136</td><td>Wohngenossenschaft Nordpol</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>137</td><td>Wohngenossenschaft Puravida</td><td>8008 Zürich</td><td class="na">—</td></tr>
+      <tr><td>138</td><td>Wohngenossenschaft Z</td><td>8032 Zürich</td><td class="na">—</td></tr>
+      <tr><td>139</td><td>Wohngenossenschaft Zeunerstrasse</td><td>8037 Zürich</td><td class="na">—</td></tr>
+      <tr><td>140</td><td>Wohnsch Verein Wohnpflegeheime Schwamendingen</td><td>8051 Zürich</td><td class="na">—</td></tr>
+      <tr><td>141</td><td>Woko Studentische Wohngenossenschaft</td><td>8005 Zürich</td><td class="na">—</td></tr>
+      <tr><td>142</td><td>ZBWG — Zürcher Bau- und Wohngenossenschaft</td><td>8006 Zürich</td><td>✓ siehe oben</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p class="detail-note" style="margin-top: 20px;">
+    Quellen: wbg-schweiz.ch, wbg-zh.ch, abz.ch, fgzzh.ch, gbmz.ch, wogeno-zuerich.ch, kalkbreite.net, mehralswohnen.ch, kraftwerk1.ch, zbwg.ch, mbgz.ch, LinkedIn, Moneyhouse &nbsp;·&nbsp; Recherche: April 2026
+  </p>
+
+</div><!-- /container -->
+
+<script>
+function filterTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const plz = document.getElementById('plzFilter').value;
+  const rows = document.querySelectorAll('#fullTable tbody tr');
+  rows.forEach(row => {
+    const name = row.cells[1].textContent.toLowerCase();
+    const ort  = row.cells[2].textContent;
+    const matchSearch = !search || name.includes(search) || ort.toLowerCase().includes(search);
+    const matchPlz    = !plz || ort.startsWith(plz);
+    row.classList.toggle('hidden', !(matchSearch && matchPlz));
+  });
+}
+</script>
+
+</body>
+</html>
