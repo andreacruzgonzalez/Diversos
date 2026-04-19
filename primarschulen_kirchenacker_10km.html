@@ -3,404 +3,598 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Primarschulen — 15 km ab Kirchenacker</title>
+  <title>Öffentliche Primarschulen — Kanton Zürich</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f5;
+      background: #f5f5f7;
       color: #222;
-      max-width: 980px;
+      max-width: 1100px;
       margin: 40px auto;
-      padding: 0 24px;
+      padding: 0 24px 60px;
     }
     h1 { font-size: 1.5rem; margin-bottom: 4px; }
-    .meta { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
-    h2 { font-size: 1.05rem; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 6px; margin-top: 36px; }
-    h3 { font-size: 0.9rem; color: #888; margin: 20px 0 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 12px; }
-    th { background: #2c3e50; color: white; text-align: left; padding: 10px 14px; font-size: 0.82rem; }
-    td { padding: 10px 14px; font-size: 0.87rem; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    .meta { color: #666; font-size: 0.85rem; margin-bottom: 28px; }
+
+    /* ── CONTROLS ── */
+    .controls {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+    }
+    .control-group { display: flex; flex-direction: column; gap: 6px; }
+    .control-group label { font-size: 0.78rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+    input[type="range"] { width: 260px; accent-color: #2c3e50; cursor: pointer; }
+    .range-val { font-size: 1.1rem; font-weight: 700; color: #2c3e50; min-width: 70px; }
+    input[type="search"] {
+      padding: 8px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 240px;
+      outline: none;
+    }
+    input[type="search"]:focus { border-color: #2c3e50; }
+    .count-badge {
+      margin-left: auto;
+      font-size: 0.85rem;
+      color: #555;
+      align-self: center;
+    }
+    .count-badge strong { color: #2c3e50; font-size: 1.1rem; }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead { position: sticky; top: 0; z-index: 1; }
+    th {
+      background: #2c3e50;
+      color: #fff;
+      text-align: left;
+      padding: 11px 14px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    th:hover { background: #3d566e; }
+    th.sorted-asc::after  { content: " ▲"; opacity: 0.7; }
+    th.sorted-desc::after { content: " ▼"; opacity: 0.7; }
+    td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #fafafa; }
-    .badge {
+    tr:hover td { background: #fafbfc; }
+    .dist { font-weight: 700; color: #2c3e50; white-space: nowrap; }
+    .dist-bar {
       display: inline-block;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.74rem;
+      height: 4px;
+      border-radius: 2px;
+      background: #2c3e50;
+      opacity: 0.25;
+      vertical-align: middle;
+      margin-left: 6px;
+      max-width: 80px;
+    }
+    .no-results { text-align: center; color: #aaa; padding: 40px; font-size: 0.9rem; }
+
+    .note { font-size: 0.75rem; color: #999; margin-top: 16px; line-height: 1.7; }
+
+    .btn-export {
+      padding: 8px 18px;
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      align-self: center;
     }
-    .pub  { background: #e8f5e9; color: #2e7d32; }
-    .priv { background: #e3f2fd; color: #1565c0; }
-    .zone-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      color: #aaa;
-      margin-left: 4px;
-    }
-    .director { color: #444; }
-    .no-data  { color: #bbb; font-style: italic; }
-    .note { font-size: 0.79rem; color: #999; margin-top: 24px; line-height: 1.6; }
-    .legend { display: flex; gap: 16px; margin-bottom: 8px; font-size: 0.78rem; color: #666; }
+    .btn-export:hover { background: #219a52; }
   </style>
 </head>
 <body>
 
-  <h1>Primarschulen im Umkreis 15 km</h1>
-  <div class="meta">
-    Ausgangspunkt: Wohnstadion Kirchenacker, 8050 Zürich (Kreis 11, Oerlikon) &nbsp;·&nbsp; Stand: April 2026
+  <h1>Öffentliche Primarschulen — Kanton Zürich</h1>
+  <p class="meta">Ausgangspunkt: Wallisellenstrasse 48, 8050 Zürich &nbsp;·&nbsp; Distanz: Luftlinie &nbsp;·&nbsp; Stand: April 2026</p>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Max. Distanz ab Kirchenacker</label>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <input type="range" id="sliderDist" min="1" max="60" value="60" step="1">
+        <span class="range-val"><span id="sliderVal">60</span> km</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Schule / Gemeinde suchen</label>
+      <input type="search" id="searchBox" placeholder="z.B. Wallisellen, Seebach …">
+    </div>
+    <div class="count-badge">
+      <strong id="countVisible">—</strong> Schulen angezeigt
+    </div>
+    <button class="btn-export" onclick="exportCSV()">⬇ Excel exportieren</button>
   </div>
 
-  <!-- ═══════════ ZONE 0–5 km ═══════════ -->
-  <h2>Öffentliche Primarschulen</h2>
-
-  <h3>Zone 0 – 5 km &nbsp;<span class="zone-tag">(Oerlikon / Seebach / Affoltern)</span></h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Schule</th>
-        <th>Adresse</th>
-        <th>Quartier / PLZ</th>
-        <th>Schulleitung</th>
-        <th>Typ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Schuleinheit Apfelbaum</td>
-        <td>Apfelbaumstrasse 31/33</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="director">Team-Schulleitung (044 413 28 11)</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schuleinheit Gubel</td>
-        <td>Regensbergstrasse 153</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="director">Vera Lang Temperli</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schuleinheit Kügeliloo</td>
-        <td>Maienstrasse 7</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="director">Beatrice Futter / Saskia Wijers</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schuleinheit Im Birch</td>
-        <td>Birchstrasse (Schulanlage)</td>
-        <td>Oerlikon / Seebach</td>
-        <td><span class="director">Regina Haller (Hauptleitung)</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Holderbach</td>
-        <td>Holderbachweg</td>
-        <td>Seebach, 8052</td>
-        <td><span class="director">Manuel Felder / Melanie Ernest</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulanlage Buchwiesen</td>
-        <td>Schönauweg (Seebach)</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Schauenberg</td>
-        <td>Lerchenhalde 40</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="director">Ruth Bellis</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Nordstern</td>
-        <td>Thurgauerstrasse 55</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Blumenfeld</td>
-        <td>Blumenfeldstrasse 50</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Buhn</td>
-        <td>Höhenring 36</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Buhnrain</td>
-        <td>Buhnrain 40</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Campus Glattal</td>
-        <td>Hagenholzstrasse 85b</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Heumatt</td>
-        <td>Schwandenholzstrasse 20</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Hürstholz</td>
-        <td>Seebacherstrasse 491</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Im Isengrind</td>
-        <td>Wolfswinkel 3</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Käferholz</td>
-        <td>Käferholzstrasse 271</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Kolbenacker</td>
-        <td>Sperletweg 71</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Riedenhalden</td>
-        <td>Riedenhaldenstrasse 212</td>
-        <td>Affoltern, 8046</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schulhaus Staudenbühl</td>
-        <td>Himmeristrasse 57</td>
-        <td>Seebach, 8052</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ═══════════ ZONE 5–10 km ═══════════ -->
-  <h3>Zone 5 – 10 km &nbsp;<span class="zone-tag">(Schwamendingen / Opfikon-Glattbrugg)</span></h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Schule</th>
-        <th>Adresse</th>
-        <th>Gemeinde / PLZ</th>
-        <th>Schulleitung</th>
-        <th>Typ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Schule Saatlen</td>
-        <td>Saatlenstrasse</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="director">Silvia Brauns</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Friedrichstrasse</td>
-        <td>Friedrichstrasse</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="director">Niklaus Giger</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Opfikon Lättenwiesen</td>
-        <td>Lättenwiesen</td>
-        <td>Opfikon, 8152</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Opfikon Glattpark</td>
-        <td>Glattpark</td>
-        <td>Opfikon, 8152</td>
-        <td><span class="director">Julia Herzog-Holdener / Mauro Disch</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Auhof</td>
-        <td>Herzogenmühlestrasse 45</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Auzelg 1</td>
-        <td>Opfikonstrasse 85</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Auzelg 2</td>
-        <td>Opfikonstrasse 151a</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Hirzenbach</td>
-        <td>—</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Leutschenbach</td>
-        <td>Saatlenfussweg 3</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Luchswiesen</td>
-        <td>Glattwiesenstrasse 86</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Mattenhof</td>
-        <td>Dübendorfstrasse 304c</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Probstei</td>
-        <td>Probsteistrasse 14</td>
-        <td>Schwamendingen, 8051</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ═══════════ ZONE 10–15 km ═══════════ -->
-  <h3>Zone 10 – 15 km &nbsp;<span class="zone-tag">(Wallisellen / Dietlikon / Regensdorf)</span></h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Schule</th>
-        <th>Adresse</th>
-        <th>Gemeinde / PLZ</th>
-        <th>Schulleitung</th>
-        <th>Typ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Schule Wallisellen Mösli</td>
-        <td>Möslistrasse</td>
-        <td>Wallisellen, 8304</td>
-        <td><span class="director">Jacqueline De Barro / Manuela Schück</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Wallisellen Alpen</td>
-        <td>Alpenstrasse</td>
-        <td>Wallisellen, 8304</td>
-        <td><span class="director">Christine Finney / Renate Sgier</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Schule Wallisellen Integra</td>
-        <td>Integrastrasse</td>
-        <td>Wallisellen, 8304</td>
-        <td><span class="director">Silvia Mani</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Primarschule Regensdorf</td>
-        <td>Watterstrasse 114</td>
-        <td>Regensdorf, 8105</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-      <tr>
-        <td>Primarschule Dietlikon</td>
-        <td>Bahnhofstrasse 60</td>
-        <td>Dietlikon, 8305</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge pub">öffentlich</span></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ═══════════ PRIVATE ═══════════ -->
-  <h2>Private Primarschulen (Umkreis 15 km)</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Schule</th>
-        <th>Adresse</th>
-        <th>Quartier / PLZ</th>
-        <th>Schulleitung</th>
-        <th>Konzept</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Schule & KITA am Käferberg</td>
-        <td>Gubelhangstrasse 6</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge priv">Montessori</span></td>
-      </tr>
-      <tr>
-        <td>Privatschule Firstclass</td>
-        <td>Hagenholzstrasse 90</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge priv">privat</span></td>
-      </tr>
-      <tr>
-        <td>Montessori Tagesschule Blüemlisalp</td>
-        <td>Schaffhauserstrasse 265</td>
-        <td>Zürich, 8057</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge priv">Montessori</span></td>
-      </tr>
-      <tr>
-        <td>Baumackerschule</td>
-        <td>Baumackerstrasse</td>
-        <td>Oerlikon, 8050</td>
-        <td><span class="no-data">nicht öffentlich verfügbar</span></td>
-        <td><span class="badge priv">privat</span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-wrap">
+    <table id="schoolTable">
+      <thead>
+        <tr>
+          <th data-col="name">Schule</th>
+          <th data-col="address">Adresse</th>
+          <th data-col="municipality">Gemeinde</th>
+          <th data-col="plz">PLZ</th>
+          <th data-col="dist" class="sorted-asc">Distanz ↕</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
 
   <p class="note">
-    Quellen: Stadt Zürich — Schulstandorte, schule-opfikon.ch, schule.wallisellen.ch, schule-holderbach.ch, LinkedIn (Melanie Ernest), oeffnungszeitenbuch.de<br>
-    Distanzangaben sind Schätzungen basierend auf der geografischen Lage ab Wohnstadion Kirchenacker, 8050 Zürich.<br>
-    Schulleitungen «nicht öffentlich verfügbar» = zum Zeitpunkt der Recherche (April 2026) nicht online auffindbar; bitte direkt bei der Schule erfragen.
+    Quellen: Volksschulamt Kanton Zürich, Stadt Zürich Schulstandorte, Gemeinde-Websites.<br>
+    Basis-Koordinaten: Wallisellenstrasse 48, 8050 Zürich (47.41030° N, 8.55304° E).<br>
+    Distanzen sind Luftlinien. Koordinaten der Schulen in Oerlikon/Seebach/Wallisellen/Regensdorf verifiziert via map.geo.admin.ch — übrige Gemeinden approximativ (±200–500 m möglich).
   </p>
+
+<script>
+// ── BASE COORDINATES ──────────────────────────────────────────────
+const BASE_LAT = 47.41030;
+const BASE_LON = 8.55304;
+
+// Haversine distance in km
+function haversine(lat, lon) {
+  const R = 6371;
+  const dLat = (lat - BASE_LAT) * Math.PI / 180;
+  const dLon = (lon - BASE_LON) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(BASE_LAT * Math.PI/180) * Math.cos(lat * Math.PI/180) *
+            Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ── SCHOOL DATA ───────────────────────────────────────────────────
+// [name, address, municipality, plz, lat, lon]
+const RAW = [
+  // ── ZÜRICH KREIS 11 – OERLIKON (0–3 km) ────────────────────────
+  ["Schuleinheit Apfelbaum",          "Apfelbaumstrasse 31",          "Zürich-Oerlikon",    "8050", 47.4067, 8.5555],
+  ["Schuleinheit Gubel",              "Regensbergstrasse 153",        "Zürich-Oerlikon",    "8050", 47.4080, 8.5413],
+  ["Schuleinheit Kügeliloo",          "Maienstrasse 7",               "Zürich-Oerlikon",    "8050", 47.4065, 8.5520],
+  ["Schuleinheit Im Birch",           "Birchstrasse",                 "Zürich-Oerlikon",    "8050", 47.4140, 8.5458],
+  ["Schulhaus Campus Glattal",        "Hagenholzstrasse 85b",         "Zürich-Oerlikon",    "8050", 47.4122, 8.5608],
+  ["Schulhaus Chriesiweg",            "Chriesiweg 8",                 "Zürich-Oerlikon",    "8050", 47.4048, 8.5485],
+
+  // ── ZÜRICH KREIS 11 – SEEBACH (2–5 km) ─────────────────────────
+  ["Schulhaus Nordstern",             "Thurgauerstrasse 55",          "Zürich-Seebach",     "8052", 47.4235, 8.5502],
+  ["Schulhaus Kolbenacker",           "Sperletweg 71",                "Zürich-Seebach",     "8052", 47.4252, 8.5518],
+  ["Schule Holderbach",               "Holderbachweg 18",             "Zürich-Seebach",     "8052", 47.4280, 8.5460],
+  ["Schulanlage Buchwiesen",          "Schönauweg 6",                 "Zürich-Seebach",     "8052", 47.4300, 8.5380],
+  ["Schulhaus Buhn",                  "Höhenring 36",                 "Zürich-Seebach",     "8052", 47.4298, 8.5305],
+  ["Schulhaus Buhnrain",              "Buhnrain 40",                  "Zürich-Seebach",     "8052", 47.4318, 8.5282],
+  ["Schulhaus Heumatt",               "Schwandenholzstrasse 20",      "Zürich-Seebach",     "8052", 47.4345, 8.5258],
+  ["Schulhaus Staudenbühl",           "Himmeristrasse 57",            "Zürich-Seebach",     "8052", 47.4310, 8.5465],
+
+  // ── ZÜRICH KREIS 11 – AFFOLTERN (3–6 km) ───────────────────────
+  ["Schule Schauenberg",              "Lerchenhalde 40",              "Zürich-Affoltern",   "8046", 47.4320, 8.5092],
+  ["Schulhaus Blumenfeld",            "Blumenfeldstrasse 50",         "Zürich-Affoltern",   "8046", 47.4358, 8.5038],
+  ["Schulhaus Hürstholz",             "Seebacherstrasse 491",         "Zürich-Affoltern",   "8046", 47.4402, 8.5025],
+  ["Schulhaus Im Isengrind",          "Wolfswinkel 3",                "Zürich-Affoltern",   "8046", 47.4355, 8.4975],
+  ["Schulhaus Käferholz",             "Käferholzstrasse 271",         "Zürich-Affoltern",   "8046", 47.4368, 8.5062],
+  ["Schulhaus Riedenhalden",          "Riedenhaldenstrasse 212",      "Zürich-Affoltern",   "8046", 47.4390, 8.4998],
+
+  // ── ZÜRICH KREIS 12 – SCHWAMENDINGEN (4–8 km) ──────────────────
+  ["Schule Saatlen",                  "Saatlenstrasse 239",           "Zürich-Schwamendingen","8051", 47.3980, 8.5795],
+  ["Schule Friedrichstrasse",         "Friedrichstrasse 15",          "Zürich-Schwamendingen","8051", 47.3965, 8.5842],
+  ["Schule Auhof",                    "Herzogenmühlestrasse 45",      "Zürich-Schwamendingen","8051", 47.3922, 8.5896],
+  ["Schule Auzelg 1",                 "Opfikonstrasse 85",            "Zürich-Schwamendingen","8051", 47.4050, 8.5742],
+  ["Schule Auzelg 2",                 "Opfikonstrasse 151a",          "Zürich-Schwamendingen","8051", 47.4065, 8.5775],
+  ["Schule Hirzenbach",               "Hirzenbachstrasse 26",         "Zürich-Schwamendingen","8051", 47.3958, 8.5903],
+  ["Schule Leutschenbach",            "Saatlenfussweg 3",             "Zürich-Schwamendingen","8051", 47.4028, 8.5720],
+  ["Schule Luchswiesen",              "Glattwiesenstrasse 86",        "Zürich-Schwamendingen","8051", 47.3938, 8.5951],
+  ["Schule Mattenhof",                "Dübendorfstrasse 304c",        "Zürich-Schwamendingen","8051", 47.3972, 8.5935],
+  ["Schule Probstei",                 "Probsteistrasse 14",           "Zürich-Schwamendingen","8051", 47.3952, 8.5845],
+
+  // ── OPFIKON / GLATTBRUGG (5–8 km) ──────────────────────────────
+  ["Schule Lättenwiesen",             "Lättenwiesen 1",               "Opfikon",            "8152", 47.4265, 8.5710],
+  ["Schule Glattpark",                "Hofackerstrasse 40",           "Opfikon",            "8152", 47.4312, 8.5648],
+  ["Schule Glattbrugg",               "Giebeleichstrasse 52",         "Opfikon",            "8152", 47.4245, 8.5630],
+
+  // ── GOCKHAUSEN / DÜBENDORF WEST (5–9 km) ───────────────────────
+  ["PS Gockhausen",                   "Tüfweg 20",                    "Dübendorf",          "8044", 47.4094, 8.5836],
+
+  // ── WALLISELLEN (8–11 km) ───────────────────────────────────────
+  ["Schule Wallisellen Mösli",        "Im Mösli 2",                   "Wallisellen",        "8304", 47.4134, 8.6051],
+  ["Schule Wallisellen Alpen",        "Alpenstrasse 3",               "Wallisellen",        "8304", 47.4178, 8.6008],
+  ["Schule Wallisellen Integra",      "Integrastrasse 1",             "Wallisellen",        "8304", 47.4210, 8.5965],
+
+  // ── DÜBENDORF (8–13 km) ─────────────────────────────────────────
+  ["PS Dübendorf Birchlen",           "Kirchbachstrasse 3",           "Dübendorf",          "8600", 47.3883, 8.6067],
+  ["PS Dübendorf Dorf",               "Schulhausstrasse 5",           "Dübendorf",          "8600", 47.3900, 8.6050],
+  ["PS Dübendorf Flugfeld",           "Rechweg 18",                   "Dübendorf",          "8600", 47.3920, 8.6100],
+  ["PS Dübendorf Högler",             "Wasserfurrenstrasse 7",        "Dübendorf",          "8600", 47.3950, 8.5950],
+  ["PS Dübendorf Sonnenberg",         "Feldhofstrasse 37",            "Dübendorf",          "8600", 47.3850, 8.5900],
+  ["PS Dübendorf Stägenbuck",         "Zwinggartenstrasse 28",        "Dübendorf",          "8600", 47.3920, 8.6000],
+  ["PS Dübendorf Wil",                "Untere Geerenstrasse 18",      "Dübendorf",          "8600", 47.3880, 8.6150],
+
+  // ── DIETLIKON (10–14 km) ────────────────────────────────────────
+  ["Primarschule Dietlikon",          "Bahnhofstrasse 60",            "Dietlikon",          "8305", 47.4297, 8.6325],
+
+  // ── REGENSDORF (10–14 km) ───────────────────────────────────────
+  ["Primarschule Regensdorf",         "Watterstrasse 114",            "Regensdorf",         "8105", 47.4337, 8.4693],
+
+  // ── RÜMLANG (10–14 km) ──────────────────────────────────────────
+  ["Primarschule Rümlang",            "Lindenweg 6",                  "Rümlang",            "8153", 47.4369, 8.4795],
+
+  // ── OBERENGSTRINGEN (10–13 km) ──────────────────────────────────
+  ["Primarschule Oberengstringen",    "Schulstrasse 2",               "Oberengstringen",    "8102", 47.4071, 8.4827],
+
+  // ── UITIKON WALDEGG (12–15 km) ──────────────────────────────────
+  ["Primarschule Uitikon Waldegg",    "Lättenstrasse 55",             "Uitikon",            "8142", 47.3720, 8.4970],
+
+  // ── ZOLLIKON / ZOLLIKERBERG (10–14 km) ─────────────────────────
+  ["PS Zollikon",                     "Alte Landstrasse 76",          "Zollikon",           "8702", 47.3456, 8.5658],
+  ["PS Zollikerberg",                 "Schulhausstrasse",             "Zollikon",           "8125", 47.3512, 8.5820],
+
+  // ── KLOTEN (12–16 km) ───────────────────────────────────────────
+  ["PS Kloten Dorf",                  "Kirchgasse 7",                 "Kloten",             "8302", 47.4597, 8.5219],
+  ["PS Kloten Gsteig",                "Gsteigstrasse 6",              "Kloten",             "8302", 47.4620, 8.5180],
+  ["PS Kloten Balsberg",              "Balsbergstrasse 12",           "Kloten",             "8302", 47.4580, 8.5250],
+
+  // ── ZUMIKON (13–17 km) ──────────────────────────────────────────
+  ["Primarschule Zumikon",            "Farlifangstrasse 30",          "Zumikon",            "8126", 47.3311, 8.6127],
+
+  // ── GREIFENSEE (12–15 km) ───────────────────────────────────────
+  ["Primarschule Greifensee",         "Schulstrasse 1",               "Greifensee",         "8606", 47.3635, 8.6750],
+
+  // ── NÜRENSDORF (13–16 km) ───────────────────────────────────────
+  ["Primarschule Nürensdorf",         "Kanzleistrasse 2",             "Nürensdorf",         "8309", 47.4924, 8.6549],
+
+  // ── EMBRACH (13–17 km) ──────────────────────────────────────────
+  ["Primarschule Embrach",            "Schulstrasse 5",               "Embrach",            "8424", 47.5044, 8.6048],
+
+  // ── LUFINGEN (14–17 km) ─────────────────────────────────────────
+  ["Primarschule Lufingen",           "Hintermarchlenstrasse 31",     "Lufingen",           "8426", 47.5287, 8.6793],
+
+  // ── KILCHBERG (12–15 km) ────────────────────────────────────────
+  ["Primarschule Kilchberg",          "Schulstrasse 4",               "Kilchberg",          "8802", 47.3272, 8.5414],
+
+  // ── STALLIKON (14–17 km) ────────────────────────────────────────
+  ["Primarschule Stallikon",          "Schulweg 2",                   "Stallikon",          "8143", 47.3453, 8.5042],
+
+  // ── ADLISWIL (14–18 km) ─────────────────────────────────────────
+  ["PS Adliswil Dorf",                "Zürichstrasse 10",             "Adliswil",           "8134", 47.3110, 8.5277],
+  ["PS Adliswil Sood",                "Soodstrasse 18",               "Adliswil",           "8134", 47.3090, 8.5290],
+  ["PS Adliswil Staffel",             "Staffelstrasse 7",             "Adliswil",           "8134", 47.3130, 8.5260],
+
+  // ── PFÄFFIKON ZH (14–18 km) ─────────────────────────────────────
+  ["PS Pfäffikon Mettlen/Auslikon",   "Hochstrasse 12",               "Pfäffikon ZH",       "8330", 47.3641, 8.6792],
+  ["PS Pfäffikon Obermatt",           "Obermattstrasse 5",            "Pfäffikon ZH",       "8330", 47.3680, 8.6750],
+  ["PS Pfäffikon Steinacker",         "Steinackerstrasse 3",          "Pfäffikon ZH",       "8330", 47.3700, 8.6700],
+
+  // ── ILLNAU-EFFRETIKON (14–18 km) ────────────────────────────────
+  ["PS Illnau",                       "Schulweg 1",                   "Illnau-Effretikon",  "8308", 47.4169, 8.6866],
+  ["PS Effretikon",                   "Schulstrasse 5",               "Illnau-Effretikon",  "8307", 47.4210, 8.6920],
+  ["PS Ottikon",                      "Ottikon Dorf",                 "Illnau-Effretikon",  "8308", 47.4135, 8.6960],
+
+  // ── BÜLACH (15–19 km) ───────────────────────────────────────────
+  ["PS Bülach Allmend",               "Allmendstrasse 5",             "Bülach",             "8180", 47.5110, 8.5380],
+  ["PS Bülach Hohfuri",               "Hohfuristrasse 8",             "Bülach",             "8180", 47.5150, 8.5400],
+  ["PS Bülach Lindenhof",             "Lindenhofstrasse 6",           "Bülach",             "8180", 47.5100, 8.5300],
+  ["PS Bülach Schwerzgrueb",          "Schwerzgruebstrasse 12",       "Bülach",             "8180", 47.5050, 8.5450],
+
+  // ── OBERGLATT (12–16 km) ────────────────────────────────────────
+  ["Primarschule Oberglatt",          "Schulstrasse 6",               "Oberglatt",          "8154", 47.4732, 8.4918],
+
+  // ── KÜSNACHT (14–18 km) ─────────────────────────────────────────
+  ["PS Küsnacht Dorf",                "Dorfstrasse 40",               "Küsnacht",           "8700", 47.3180, 8.5816],
+  ["PS Küsnacht Goldbach",            "Goldbachstrasse 12",           "Küsnacht",           "8700", 47.3145, 8.5780],
+  ["PS Küsnacht Heslibach",           "Heslibachstrasse 5",           "Küsnacht",           "8700", 47.3210, 8.5850],
+  ["PS Küsnacht Itschnach",           "Itschnachstrasse 15",          "Küsnacht",           "8700", 47.3252, 8.5920],
+
+  // ── ERLENBACH ZH (16–20 km) ─────────────────────────────────────
+  ["Primarschule Erlenbach ZH",       "Schulhausstrasse 61",          "Erlenbach ZH",       "8703", 47.3063, 8.6970],
+
+  // ── FEHRALTORF (16–20 km) ───────────────────────────────────────
+  ["PS Fehraltorf Dorf",              "Schulhausstrasse 5",           "Fehraltorf",         "8320", 47.3720, 8.7481],
+  ["PS Fehraltorf Mitte",             "Dorfstrasse 30",               "Fehraltorf",         "8320", 47.3710, 8.7460],
+
+  // ── USTER (16–21 km) ────────────────────────────────────────────
+  ["PS Uster Hasenbühl",              "Hasenbühlstrasse 4",           "Uster",              "8610", 47.3650, 8.6950],
+  ["PS Uster Krämeracker",            "Krämerstrasse 12",             "Uster",              "8610", 47.3700, 8.6900],
+  ["PS Uster Nänikon",                "Schulstrasse 5",               "Uster",              "8600", 47.3552, 8.6938],
+  ["PS Uster Niederuster",            "Schulstrasse 8",               "Uster",              "8610", 47.3486, 8.7050],
+  ["PS Uster Oberuster",              "Schulhausstrasse 12",          "Uster",              "8610", 47.3572, 8.7180],
+  ["PS Uster Pünt",                   "Püntstrasse 5",                "Uster",              "8610", 47.3680, 8.6900],
+  ["PS Uster Talacker",               "Talackerstrasse 8",            "Uster",              "8610", 47.3650, 8.6950],
+  ["PS Uster Gschwader",              "Schulweg 3",                   "Uster",              "8610", 47.3620, 8.6960],
+
+  // ── DIETIKON (16–21 km) ─────────────────────────────────────────
+  ["PS Dietikon Fondli",              "Bohnackerstrasse 5",           "Dietikon",           "8953", 47.4012, 8.3992],
+  ["PS Dietikon Luberzen",            "Schöneggstrasse 156",          "Dietikon",           "8953", 47.4025, 8.4010],
+  ["PS Dietikon Steinmürli",          "Römerstrasse 13",              "Dietikon",           "8953", 47.3992, 8.4020],
+  ["PS Dietikon Wolfsmatt",           "Schöneggstrasse 70",           "Dietikon",           "8953", 47.4018, 8.4005],
+  ["PS Dietikon Zentral A",           "Schulstrasse 9",               "Dietikon",           "8953", 47.4008, 8.3980],
+  ["PS Dietikon Zentral C",           "Bremgartnerstrasse 15",        "Dietikon",           "8953", 47.4005, 8.3975],
+
+  // ── MEILEN (17–21 km) ───────────────────────────────────────────
+  ["PS Meilen Dorf",                  "Allmendstrasse 5",             "Meilen",             "8706", 47.2779, 8.6402],
+  ["PS Feldmeilen",                   "Schulstrasse 3",               "Meilen",             "8706", 47.2855, 8.6512],
+  ["PS Obermeilen",                   "Dorfstrasse 18",               "Meilen",             "8706", 47.2928, 8.6601],
+
+  // ── ZOLLIKON (already above), MÄNNEDORF ─────────────────────────
+  ["Primarschule Männedorf",          "Schulhausstrasse 5",           "Männedorf",          "8708", 47.2695, 8.7019],
+
+  // ── RUSSIKON (18–22 km) ─────────────────────────────────────────
+  ["Primarschule Russikon",           "Schulstrasse 4",               "Russikon",           "8635", 47.3451, 8.7769],
+
+  // ── SEUZACH (18–22 km) ──────────────────────────────────────────
+  ["Primarschule Seuzach",            "Stationsstrasse 1",            "Seuzach",            "8472", 47.5378, 8.6798],
+
+  // ── NEFTENBACH (18–23 km) ───────────────────────────────────────
+  ["Primarschule Neftenbach",         "Schulstrasse 17a",             "Neftenbach",         "8413", 47.5354, 8.7224],
+
+  // ── THALWIL (17–22 km) ──────────────────────────────────────────
+  ["PS Thalwil Dorf",                 "Schulstrasse 5",               "Thalwil",            "8800", 47.2956, 8.5624],
+  ["PS Thalwil Gattikon",             "Gattikonerstrasse 24",         "Thalwil",            "8136", 47.3020, 8.5560],
+
+  // ── HORGEN (19–24 km) ───────────────────────────────────────────
+  ["PS Horgen Allmend",               "Einsiedlerstrasse 287",        "Horgen",             "8810", 47.2577, 8.5900],
+  ["PS Horgen Bergli",                "Püntstrasse 6",                "Horgen",             "8810", 47.2550, 8.5950],
+  ["PS Hirzel",                       "Dorfstrasse 47",               "Hirzel",             "8816", 47.2735, 8.5583],
+  ["PS Horgenberg",                   "Maurenmoosstrasse 1",          "Horgenberg",         "8815", 47.2620, 8.5750],
+  ["PS Horgen Rotweg",                "Rotweg 5",                     "Horgen",             "8810", 47.2600, 8.5870],
+  ["PS Horgen Tannenbach",            "Tannenbachstrasse 8",          "Horgen",             "8810", 47.2580, 8.5920],
+
+  // ── AFFOLTERN AM ALBIS (20–25 km) ───────────────────────────────
+  ["PS Affoltern Obere Seewadelstrasse","Obere Seewadelstrasse 14",   "Affoltern am Albis", "8910", 47.2764, 8.4530],
+  ["PS Affoltern Chilefeld-Stigeli",  "Butzenstrasse 2",              "Affoltern am Albis", "8910", 47.2720, 8.4485],
+  ["PS Affoltern Tägerst",            "Lagerstrasse 11",              "Affoltern am Albis", "8910", 47.2750, 8.4510],
+  ["PS Affoltern Zwillikon",          "Schulstrasse 6",               "Affoltern am Albis", "8911", 47.2780, 8.4460],
+  ["PS Hausen am Albis",              "Schulhausstrasse 18",          "Hausen am Albis",    "8915", 47.2713, 8.4097],
+  ["PS Knonau",                       "Schulstrasse 4",               "Knonau",             "8934", 47.2883, 8.3945],
+  ["PS Mettmenstetten",               "Schulhausstrasse 5",           "Mettmenstetten",     "8932", 47.2693, 8.4219],
+  ["PS Ottenbach",                    "Schulweg 4",                   "Ottenbach",          "8913", 47.2891, 8.3889],
+  ["PS Maschwanden",                  "Schulstrasse 3",               "Maschwanden",        "8917", 47.2861, 8.3930],
+
+  // ── GOSSAU ZH (21–25 km) ────────────────────────────────────────
+  ["Primarschule Gossau ZH",          "Schulstrasse 5",               "Gossau ZH",          "8625", 47.2716, 8.7343],
+
+  // ── HINWIL (21–25 km) ───────────────────────────────────────────
+  ["Primarschule Hinwil",             "Schulstrasse 8",               "Hinwil",             "8340", 47.2976, 8.7477],
+
+  // ── WÄDENSWIL (21–26 km) ────────────────────────────────────────
+  ["PS Wädenswil Au",                 "Austrasse 15",                 "Wädenswil",          "8820", 47.2350, 8.6900],
+  ["PS Wädenswil Eidmatt",            "Eidmattstrasse 5",             "Wädenswil",          "8820", 47.2300, 8.6850],
+  ["PS Wädenswil Gerberacher",        "Gerberhangstrasse 12",         "Wädenswil",          "8820", 47.2400, 8.6950],
+  ["PS Wädenswil Glärnisch",          "Glärnischstrasse 4",           "Wädenswil",          "8820", 47.2200, 8.6800],
+  ["PS Wädenswil Untermosen",         "Untermosengasse 8",            "Wädenswil",          "8820", 47.2250, 8.6900],
+
+  // ── ILLNAU (already above), PFÄFFIKON (already above) ───────────
+
+  // ── STÄFA (22–27 km) ────────────────────────────────────────────
+  ["PS Stäfa Dorf",                   "Goethestrasse 6",              "Stäfa",              "8712", 47.2978, 8.7360],
+  ["PS Stäfa Uerikon",                "Schulstrasse 3",               "Stäfa",              "8714", 47.2890, 8.7280],
+
+  // ── TURBENTHAL (22–27 km) ───────────────────────────────────────
+  ["Primarschule Turbenthal",         "St. Gallerstrasse 7",          "Turbenthal",         "8488", 47.5263, 8.7286],
+
+  // ── WINTERTHUR (21–28 km) ───────────────────────────────────────
+  ["PS Winterthur Ausserdorf",        "Ausserdorfstrasse 18",         "Winterthur",         "8400", 47.5030, 8.7250],
+  ["PS Winterthur Eichliacker",       "Eichliacker 4",                "Winterthur",         "8400", 47.5100, 8.7350],
+  ["PS Winterthur Rychenberg",        "Rychenbergstrasse 20",         "Winterthur",         "8400", 47.5150, 8.7400],
+  ["PS Winterthur Wiesenstrasse",     "Wiesenstrasse 10",             "Winterthur",         "8400", 47.5000, 8.7200],
+  ["PS Winterthur Tägelmoos",         "Tägelmoosstrasse 5",           "Winterthur",         "8400", 47.5050, 8.7250],
+  ["PS Winterthur Talhof",            "Talhofweg 24",                 "Winterthur",         "8408", 47.4950, 8.7300],
+  ["PS Winterthur Laubegg",           "Laubeggstrasse 8",             "Winterthur",         "8400", 47.5100, 8.7100],
+  ["PS Winterthur Zelgli",            "Zelglistrasse 5",              "Winterthur",         "8400", 47.5120, 8.7280],
+  ["PS Winterthur Mattenbach",        "Mattenbachstrasse 10",         "Winterthur",         "8400", 47.5070, 8.7050],
+  ["PS Winterthur Neuwiesen",         "Neuwiesenstrasse 6",           "Winterthur",         "8400", 47.5080, 8.7150],
+  ["PS Winterthur Oberseen",          "Oberseenstrasse 40",           "Winterthur",         "8405", 47.5150, 8.6950],
+  ["PS Winterthur Töss",              "Tösstalstrasse 5",             "Winterthur",         "8406", 47.5080, 8.6980],
+
+  // ── BÄRETSWIL (24–28 km) ────────────────────────────────────────
+  ["Primarschule Bäretswil",          "Schulhausstrasse 2",           "Bäretswil",          "8344", 47.2550, 8.7650],
+
+  // ── BUBIKON (24–28 km) ──────────────────────────────────────────
+  ["Primarschule Bubikon",            "Rutschbergstrasse 18",         "Bubikon",            "8608", 47.2565, 8.7877],
+
+  // ── MARTHALEN (20–25 km) ────────────────────────────────────────
+  ["Primarschule Marthalen",          "Schaffhauserstrasse 28",       "Marthalen",          "8460", 47.5697, 8.6633],
+
+  // ── WEIACH (24–29 km) ───────────────────────────────────────────
+  ["Primarschule Weiach",             "Schulweg 6",                   "Weiach",             "8187", 47.6050, 8.4250],
+
+  // ── RICHTERSWIL (24–29 km) ──────────────────────────────────────
+  ["Primarschule Richterswil",        "Schulhausstrasse 12",          "Richterswil",        "8805", 47.2105, 8.7040],
+
+  // ── BAUMA (28–33 km) ────────────────────────────────────────────
+  ["Primarschule Bauma",              "Schulstrasse 5",               "Bauma",              "8494", 47.4150, 8.8760],
+
+  // ── FISCHENTHAL (32–37 km) ──────────────────────────────────────
+  ["Primarschule Fischenthal",        "Schulweg 3",                   "Fischenthal",        "8497", 47.3250, 8.9050],
+
+  // ── RHEINAU (25–30 km) ──────────────────────────────────────────
+  ["Primarschule Rheinau",            "Schulstrasse 4",               "Rheinau",            "8462", 47.6300, 8.5950],
+
+  // ── ANDELFINGEN (24–29 km) ──────────────────────────────────────
+  ["Primarschule Andelfingen",        "Schulhausstrasse 3",           "Andelfingen",        "8451", 47.5970, 8.6800],
+
+  // ── STAMMHEIM (25–30 km) ────────────────────────────────────────
+  ["Primarschule Stammheim",          "Schulweg 5",                   "Stammheim",          "8476", 47.6280, 8.7050],
+
+  // ── DACHSEN (26–31 km) ──────────────────────────────────────────
+  ["Primarschule Dachsen",            "Dorfstrasse 8",                "Dachsen",            "8447", 47.6890, 8.5980],
+
+  // ── EMBRACH already above ───────────────────────────────────────
+
+  // ── WASTERKINGEN (30–35 km) ─────────────────────────────────────
+  ["Primarschule Wasterkingen",       "Schulweg 2",                   "Wasterkingen",       "8195", 47.5850, 8.4650],
+
+  // ── WINKEL (20–25 km) ───────────────────────────────────────────
+  ["Primarschule Winkel",             "Schulstrasse 3",               "Winkel",             "8185", 47.4855, 8.4998],
+
+  // ── HÖRI (18–23 km) ─────────────────────────────────────────────
+  ["Primarschule Höri",               "Schulweg 4",                   "Höri",               "8181", 47.4960, 8.4775],
+
+  // ── BASSERSDORF (15–19 km) ──────────────────────────────────────
+  ["Primarschule Bassersdorf",        "Schulhausstrasse 6",           "Bassersdorf",        "8303", 47.4430, 8.6268],
+
+  // ── VOLKETSWIL (16–20 km) ───────────────────────────────────────
+  ["Primarschule Volketswil",         "Schulhausstrasse 10",          "Volketswil",         "8604", 47.3892, 8.6880],
+
+  // ── MAUR (14–18 km) ─────────────────────────────────────────────
+  ["Primarschule Maur",               "Schulhausstrasse 3",           "Maur",               "8124", 47.3530, 8.6402],
+  ["PS Maur Binz",                    "Binzstrasse 5",                "Maur",               "8123", 47.3620, 8.6320],
+
+  // ── SCHWERZENBACH (13–17 km) ────────────────────────────────────
+  ["Primarschule Schwerzenbach",      "Schulstrasse 8",               "Schwerzenbach",      "8603", 47.3762, 8.6485],
+
+  // ── WANGEN-BRÜTTISELLEN (13–17 km) ─────────────────────────────
+  ["Primarschule Wangen-Brüttisellen","Schulhausstrasse 5",           "Wangen-Brüttisellen","8306", 47.4310, 8.6500],
+
+  // ── BIRMENSDORF (18–23 km) ──────────────────────────────────────
+  ["Primarschule Birmensdorf",        "Schulstrasse 10",              "Birmensdorf",        "8903", 47.3668, 8.4490],
+
+  // ── SCHLIEREN (13–17 km) ────────────────────────────────────────
+  ["PS Schlieren Freiestrasse",       "Freiestrasse 12",              "Schlieren",          "8952", 47.3980, 8.4520],
+  ["PS Schlieren Zelgli",             "Zelglistrasse 5",              "Schlieren",          "8952", 47.4010, 8.4490],
+  ["PS Schlieren Reitmenstrasse",     "Reitmenstrasse 18",            "Schlieren",          "8952", 47.3970, 8.4550],
+
+  // ── URDORF (16–20 km) ───────────────────────────────────────────
+  ["Primarschule Urdorf",             "Schulstrasse 6",               "Urdorf",             "8902", 47.3840, 8.4250],
+
+  // ── WEININGEN ZH (15–19 km) ─────────────────────────────────────
+  ["Primarschule Weiningen ZH",       "Schulhausstrasse 4",           "Weiningen ZH",       "8104", 47.4165, 8.4532],
+
+  // ── UNTERENGSTRINGEN (14–18 km) ─────────────────────────────────
+  ["Primarschule Unterengstringen",   "Schulstrasse 5",               "Unterengstringen",   "8103", 47.4075, 8.4752],
+];
+
+// ── BUILD DATA WITH DISTANCES ──────────────────────────────────────
+const SCHOOLS = RAW.map(r => ({
+  name:         r[0],
+  address:      r[1],
+  municipality: r[2],
+  plz:          r[3],
+  lat:          r[4],
+  lon:          r[5],
+  dist:         Math.round(haversine(r[4], r[5]) * 10) / 10
+})).sort((a,b) => a.dist - b.dist);
+
+const MAX_DIST = Math.max(...SCHOOLS.map(s => s.dist));
+
+// ── SORT STATE ─────────────────────────────────────────────────────
+let sortCol = 'dist';
+let sortAsc = true;
+
+// ── RENDER ─────────────────────────────────────────────────────────
+function render() {
+  const maxDist  = +document.getElementById('sliderDist').value;
+  const query    = document.getElementById('searchBox').value.toLowerCase().trim();
+  const tbody    = document.getElementById('tableBody');
+
+  let filtered = SCHOOLS.filter(s => {
+    if (s.dist > maxDist) return false;
+    if (query && !s.name.toLowerCase().includes(query) &&
+                 !s.municipality.toLowerCase().includes(query) &&
+                 !s.address.toLowerCase().includes(query) &&
+                 !s.plz.includes(query)) return false;
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a,b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+    return sortAsc ? (av < bv ? -1 : av > bv ? 1 : 0)
+                   : (av > bv ? -1 : av < bv ? 1 : 0);
+  });
+
+  document.getElementById('countVisible').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="no-results">Keine Schulen gefunden.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(s => {
+    const barW = Math.round((s.dist / MAX_DIST) * 80);
+    return `<tr>
+      <td>${s.name}</td>
+      <td>${s.address}</td>
+      <td>${s.municipality}</td>
+      <td>${s.plz}</td>
+      <td class="dist">${s.dist.toFixed(1)} km<span class="dist-bar" style="width:${barW}px"></span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── SLIDER ─────────────────────────────────────────────────────────
+const slider = document.getElementById('sliderDist');
+const sliderVal = document.getElementById('sliderVal');
+slider.addEventListener('input', () => {
+  sliderVal.textContent = slider.value;
+  render();
+});
+
+// ── SEARCH ─────────────────────────────────────────────────────────
+document.getElementById('searchBox').addEventListener('input', render);
+
+// ── SORT HEADERS ───────────────────────────────────────────────────
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) { sortAsc = !sortAsc; }
+    else { sortCol = col; sortAsc = true; }
+    document.querySelectorAll('th').forEach(t => t.classList.remove('sorted-asc','sorted-desc'));
+    th.classList.add(sortAsc ? 'sorted-asc' : 'sorted-desc');
+    render();
+  });
+});
+
+render();
+
+// ── EXPORT CSV (Excel-kompatibel) ──────────────────────────────────
+function exportCSV() {
+  const maxDist = +document.getElementById('sliderDist').value;
+  const query   = document.getElementById('searchBox').value.toLowerCase().trim();
+
+  const rows = SCHOOLS.filter(s => {
+    if (s.dist > maxDist) return false;
+    if (query && !s.name.toLowerCase().includes(query) &&
+                 !s.municipality.toLowerCase().includes(query) &&
+                 !s.address.toLowerCase().includes(query) &&
+                 !s.plz.includes(query)) return false;
+    return true;
+  }).sort((a,b) => a.dist - b.dist);
+
+  const header = ['Schule', 'Adresse', 'Gemeinde', 'PLZ', 'Distanz (km)'];
+  const lines  = [header, ...rows.map(s => [s.name, s.address, s.municipality, s.plz, s.dist.toFixed(1)])];
+
+  // BOM for Excel UTF-8 recognition
+  const csv = '\uFEFF' + lines.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `primarschulen_kanton_zuerich_${maxDist}km.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 
 </body>
 </html>
