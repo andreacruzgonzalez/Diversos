@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilotprojekt SBB — Projektbeschreibung & Unterstützungsanfrage</title>
+  <style>
+    /* ── PASSWORD OVERLAY ── */
+    #pw-overlay {
+      position: fixed;
+      inset: 0;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .pw-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+    .pw-logo {
+      display: inline-block;
+      background: #e2001a;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .pw-box h2 {
+      font-size: 1.1rem;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+    .pw-box p {
+      font-size: 0.82rem;
+      color: #888;
+      margin-bottom: 24px;
+    }
+    .pw-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 0.1em;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border 0.2s;
+    }
+    .pw-box input:focus { border-color: #e2001a; }
+    .pw-box button {
+      width: 100%;
+      padding: 12px;
+      background: #e2001a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pw-box button:hover { background: #c0001a; }
+    .pw-error {
+      color: #e2001a;
+      font-size: 0.8rem;
+      margin-top: 10px;
+      display: none;
+    }
+    #main-content { display: none; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f5f7;
+      color: #1a1a2e;
+      padding: 48px 24px 80px;
+    }
+
+    .wrapper {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: #e2001a;
+      border-radius: 14px 14px 0 0;
+      padding: 36px 40px 32px;
+      color: #fff;
+    }
+    .header .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .header .meta {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* ── BODY CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 0 0 14px 14px;
+      padding: 40px 40px 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+
+    /* ── GREETING ── */
+    .greeting {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 36px; }
+
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #e2001a;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight {
+      background: #fff5f5;
+      border-left: 4px solid #e2001a;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0 20px;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #333;
+    }
+    .highlight strong { color: #1a1a2e; }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+    .kpi {
+      background: #f8f8fb;
+      border-radius: 10px;
+      padding: 16px 18px;
+      text-align: center;
+    }
+    .kpi .kpi-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #e2001a;
+      line-height: 1.1;
+    }
+    .kpi .kpi-label {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 12px 0 20px;
+    }
+    th {
+      background: #1a1a2e;
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #444;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+
+    .status-done   { color: #2e7d32; font-weight: 600; }
+    .status-active { color: #e2001a; font-weight: 600; }
+    .status-open   { color: #999; }
+
+    /* ── SUPPORT LIST ── */
+    .support-block {
+      background: #f8f8fb;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+    .support-block h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    .support-block ul {
+      list-style: none;
+      padding: 0;
+    }
+    .support-block ul li {
+      font-size: 0.88rem;
+      color: #444;
+      padding: 5px 0;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .support-block ul li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #e2001a;
+      font-weight: 700;
+    }
+
+    .not-box {
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.83rem;
+      color: #666;
+      margin-top: 6px;
+    }
+    .not-box strong { color: #333; }
+
+    /* ── CTA ── */
+    .cta {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-top: 32px;
+      color: #fff;
+    }
+    .cta h2 { color: #fff; font-size: 1.05rem; margin-bottom: 10px; }
+    .cta p { color: rgba(255,255,255,0.75); margin-bottom: 0; font-size: 0.9rem; }
+
+    /* ── SIGNATURE ── */
+    .signature {
+      margin-top: 32px;
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.8;
+    }
+    .signature strong { color: #1a1a2e; }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 32px;
+      font-size: 0.72rem;
+      color: #bbb;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">SBB · Vertraulich</div>
+    <h2>Geschütztes Dokument</h2>
+    <p>Bitte gib das Passwort ein, um fortzufahren.</p>
+    <input type="password" id="pw-input" placeholder="Passwort" onkeydown="if(event.key==='Enter') checkPw()">
+    <button onclick="checkPw()">Zugang</button>
+    <div class="pw-error" id="pw-error">Falsches Passwort. Bitte erneut versuchen.</div>
+  </div>
+</div>
+
+<div id="main-content">
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="label">Vertraulich · April 2026</div>
+    <h1>Pilotprojekt: AI-Agenten im HR-Bereich der SBB</h1>
+    <div class="meta">Projektbeschreibung &amp; Anfrage um Unterstützung · Andrea Cruz</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- GREETING -->
+    <div class="greeting">
+      Ich leite intern bei der SBB ein Pilotprojekt rund um das Thema <strong>Künstliche Intelligenz im HR-Bereich</strong>. Das Projekt hat gerade richtig Fahrt aufgenommen und ich suche jemanden, der uns mit <strong>interner Kommunikation und internem Marketing</strong> unterstützen kann — in einem kleinen, aber wirkungsvollen Umfang (~20%).
+    </div>
+
+    <!-- SECTION 1: DAS PROJEKT -->
+    <div class="section">
+      <div class="section-title">Das Projekt</div>
+      <h2>Worum geht es?</h2>
+      <p>Die SBB beschäftigt rund 34'000 Mitarbeitende. Viele HR-Prozesse — von der Einführung neuer Mitarbeitenden bis zum Offboarding — sind repetitiv, zeitintensiv und fehleranfällig.</p>
+
+      <div class="highlight">
+        Wir wollen herausfinden, welche HR-Prozesse sinnvoll durch <strong>AI-Agenten</strong> (digitale Co-Workers) unterstützt oder automatisiert werden können — und in der Praxis erleben, wie Menschen und AI-Systeme wirklich zusammenarbeiten.
+      </div>
+
+      <p>Dieses Projekt ist ein strategischer Schritt zur Weiterentwicklung von HR als Funktion — mit dem Ziel, operative Effizienz zu steigern, Ressourcen gezielt einzusetzen und die SBB als innovative Arbeitgeberin zu stärken.</p>
+
+      <p style="font-size:0.83rem; color:#888;">Laufzeit: Februar — November 2026 &nbsp;·&nbsp; Team: intern (HRS & IT) &nbsp;·&nbsp; Projektverantwortung: Andrea Cruz</p>
+    </div>
+
+    <!-- SECTION 2: KPIs -->
+    <div class="section">
+      <div class="section-title">Was wir erreichen wollen</div>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-val">1–2</div>
+          <div class="kpi-label">Transformationsfälle als Grundlage für die HR-Strategie 2030</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">20%</div>
+          <div class="kpi-label">Automatisierung von HR-Prozessen als Zielgrösse</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">–30%</div>
+          <div class="kpi-label">Onboarding-Zeit für neue MA</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">3–5</div>
+          <div class="kpi-label">Use-Cases vollständig pilotiert</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: SUPPORT -->
+    <div class="section">
+      <div class="section-title">Was ich von dir brauche (~20%)</div>
+      <h2>Deine mögliche Rolle</h2>
+      <p>Das Projekt braucht jemanden, der uns hilft, intern die richtigen Menschen auf die richtige Weise zu erreichen — besonders wenn wir in die Pilotierungsphase eintreten.</p>
+
+      <div class="support-block">
+        <h3>Interne Kommunikation</h3>
+        <ul>
+          <li>Kommunikationsstrategie entwickeln (Wer erfährt was, wann und wie?)</li>
+          <li>Botschaften formulieren, die Akzeptanz schaffen — nicht Angst</li>
+          <li>Change-Management-Spur begleiten (wir arbeiten nach ADKAR)</li>
+          <li>Kommunikationsplan für die Pilotierungsphase mitgestalten</li>
+        </ul>
+      </div>
+
+      <div class="support-block">
+        <h3>Internes Marketing &amp; Positionierung</h3>
+        <ul>
+          <li>Projekt intern sichtbar machen — Neugier wecken statt Skepsis</li>
+          <li>HR als Innovation-Treiberin intern positionieren</li>
+          <li>Projekt-Updates, Intranet-Beiträge oder Präsentationen mitgestalten</li>
+        </ul>
+      </div>
+
+      <div class="not-box">
+        <strong>Was es nicht ist:</strong> Kein externes Marketing, keine Social Media, keine technische Arbeit — und kein Fulltime-Commitment. Wir sprechen von ca. 20 % über die nächsten Monate, flexibel gestaltbar.
+      </div>
+    </div>
+
+    <!-- SECTION 5: WARUM DU -->
+    <div class="section">
+      <div class="section-title">Warum ich an dich denke</div>
+      <p>Du verstehst, wie grosse Organisationen von innen funktionieren. Du weisst, wie man Botschaften so formuliert, dass sie ankommen — und du hast das nötige Fingerspitzengefühl für sensible Themen wie Technologieeinführung und Veränderungsprozesse.</p>
+      <p>Ausserdem kenne ich deine Arbeitsweise und weiss, dass wir gut zusammenarbeiten würden.</p>
+    </div>
+
+    <!-- SECTION: HSG -->
+    <div class="section">
+      <div class="section-title">Mögliche Kooperation</div>
+      <h2>Zusammenarbeit mit der Universität St. Gallen (HSG)</h2>
+      <p>Ich persönlich bin sehr interessiert an einer Kooperation mit der <strong>Universität St. Gallen (HSG)</strong> im Rahmen dieses Pilotprojekts. Eine solche Zusammenarbeit könnte dem Projekt eine zusätzliche wissenschaftliche Dimension geben — etwa durch begleitende Forschung, Evaluationsmethodik oder den Austausch mit Expertinnen und Experten aus dem Bereich HR und digitale Transformation.</p>
+      <div class="highlight">
+        Diese Möglichkeit befindet sich aktuell in der <strong>Abklärungsphase</strong>. Ziel ist es, nach Klärung der Rahmenbedingungen einen konkreten Vorschlag für meine Vorgesetzte ausarbeiten zu können.
+      </div>
+      <p>Falls du in diesem Bereich Kontakte oder Erfahrungen hast, freue ich mich sehr über deinen Input.</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <h2>Nächster Schritt</h2>
+      <p>Ich würde mich sehr freuen, wenn wir kurz telefonieren könnten — ganz unverbindlich. Ich erkläre dir mehr, wir schauen gemeinsam, ob es passt, und klären alle offenen Fragen.<br><br>
+      <strong style="color:#fff;">Hast du in den nächsten 1–2 Wochen Zeit für einen 30-Minuten-Call?</strong></p>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="signature">
+      <br>Herzliche Grüsse<br>
+      <strong>Andrea Cruz</strong><br>
+      AI Project Manager · SBB
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Dieses Dokument ist vertraulich und ausschliesslich für den persönlichen Gebrauch bestimmt.<br>
+      PilotSBB · April 2026
+    </div>
+
+  </div>
+</div>
+</div><!-- end main-content -->
+
+<script>
+  function checkPw() {
+    const input = document.getElementById('pw-input').value;
+    const error = document.getElementById('pw-error');
+    if (input === 'Aida2026') {
+      document.getElementById('pw-overlay').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    } else {
+      error.style.display = 'block';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+  document.getElementById('pw-input').focus();
+</script>
+
+</body>
+</html>
